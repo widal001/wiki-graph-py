@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "wiki-graph"
+version = "0.1.0"
+description = "Generate graphs of linked wikipedia articles"
+authors = ["Billy Daly <widal001@mail.goucher.edu>"]
+readme = "README.md"
+packages = [{include = "wiki_graph", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
