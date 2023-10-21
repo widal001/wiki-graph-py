@@ -1,6 +1,6 @@
 from pprint import pprint
 
-from wiki_graph.graph import graph_page_links
+from wiki_graph.graph import graph_page_links, PageLinkGraph
 from tests import data
 
 
@@ -27,7 +27,7 @@ class TestGraphPageLinks:
         graph = graph_page_links(page, get_page_links, max_rounds=3)
         # print the output and input graphs to debug
         print("~~~~~~~~~~~~ Output ~~~~~~~~~~~~~~")
-        pprint(graph)
+        pprint(graph.graph)
         print("~~~~~~~~~~~~ Input ~~~~~~~~~~~~~~~")
         pprint(data.INPUT_GRAPH)
         # check that only the "g" page is left in the input graph
@@ -35,4 +35,24 @@ class TestGraphPageLinks:
         assert len(data.INPUT_GRAPH)
         # check that all of the other pages are in the output graph
         for page in "abcdef":
-            assert page in graph
+            assert page in graph.pages
+
+
+class TestPageLinkGraph:
+    """Tests the PageLinkGraph class"""
+
+    def test_add_outbound_link(self):
+        """Tests the PageLinkGraph.add_outbound_link() method"""
+        # setup
+        graph = PageLinkGraph()
+        # execution
+        graph.add_outbound_links(src_page="a", links=["b", "c"])
+        # validation
+        assert "a" in graph.pages
+        assert "b" in graph.pages
+        assert "c" in graph.pages
+        assert "d" not in graph.pages
+        assert ("a", "b") in graph.outbound_links
+        assert ("a", "c") in graph.outbound_links
+        assert ("b", "a") not in graph.outbound_links  # links should only go from a
+        assert ("b", "c") not in graph.outbound_links  # links shouldn't exist between
