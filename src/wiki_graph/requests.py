@@ -1,5 +1,6 @@
 from typing import Optional
 
+import httpx
 
 from wiki_graph import schemas
 
@@ -29,9 +30,9 @@ def make_link_request(
 
 
 def get_page_links(
-    client,
     page_title: str,
     max_requests: int = 25,
+    client=httpx,
 ) -> list[schemas.BasePage]:
     """Get all of the outbound links from a given wikipedia page"""
     complete = None
