@@ -7,7 +7,7 @@ from wiki_graph import schemas
 BASE_URL = "https://en.wikipedia.org/w/api.php"
 
 
-def make_link_request(
+def call_outbound_links_api(
     client,
     page_title: str,
     next_result: Optional[str] = None,
@@ -29,19 +29,19 @@ def make_link_request(
     return schemas.Response(**data)
 
 
-def get_page_links(
+def get_all_outbound_links_for_a_page(
     page_title: str,
     max_requests: int = 25,
     client=httpx,
 ) -> list[schemas.BasePage]:
-    """Get all of the outbound links from a given wikipedia page"""
+    """Get all of the outbound links from a given wikipedia page, up to a max number of requests"""
     complete = None
     request_count = 0
     results: list[schemas.BasePage] = []
     try:
         while not complete and request_count < max_requests:
             request_count += 1
-            response = make_link_request(client, page_title)
+            response = call_outbound_links_api(client, page_title)
             complete = response.batchcomplete
             page_links = response.extract_links()
             if page_links:
