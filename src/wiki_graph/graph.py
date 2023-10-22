@@ -3,12 +3,14 @@ from typing import Callable
 
 import networkx as nx
 
+from wiki_graph.requests import get_all_outbound_links_for_a_page
+
 GetLinkFunc = Callable[[str, int], list]
 
 
 def graph_page_links(
     pages: list[str],
-    get_links: GetLinkFunc,
+    get_links: GetLinkFunc = get_all_outbound_links_for_a_page,
     max_requests: int = 10,
     max_rounds: int = 2,
 ) -> PageLinkGraph:
