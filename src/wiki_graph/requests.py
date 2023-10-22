@@ -44,17 +44,13 @@ def get_all_outbound_links_for_a_page(
     results = []
     while request_count < max_requests:
         request_count += 1
-        print(f"Request #{request_count} for {page_title}")
         response = call_outbound_links_api(client, page_title, next_result)
         page_links = response.extract_links()
         if page_links:
             results.extend(page_links)
+        # if the page has more links, set the next_result param and continue
+        # otherwise return the results
         if response.next_result:
-            # if there are more results to retrieve
-            # set the next_result param and continue
-            print(f"Requesting the next result for {page_title}")
             next_result = response.next_result.plcontinue
         else:
-            # otherwise return the results
-            print(f"Retrieved all links for {page_title}")
             return results
