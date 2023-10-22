@@ -17,19 +17,19 @@ class Query(BaseModel):
     pages: dict[str, Page]
 
 
-class NextPage(BaseModel):
+class NextResult(BaseModel):
     plcontinue: str
 
 
 class Response(BaseModel):
-    batchcomplete: Optional[str] = None
-    next_page: Optional[NextPage] = Field(validation_alias="continue", default=None)
+    next_result: Optional[NextResult] = Field(validation_alias="continue", default=None)
     query: Query
 
-    def extract_links(self) -> Optional[list[BasePage]]:
+    def extract_links(self) -> Optional[list[str]]:
         """Isolate a list of pages from the query result"""
         # get the first page from the list of pages
         page = next(iter(self.query.pages.values()), None)
         if not page:
             raise ValueError
-        return page.links
+        if page.links:
+            return [link.title for link in page.links]
