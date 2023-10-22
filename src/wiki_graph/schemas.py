@@ -9,7 +9,7 @@ class BasePage(BaseModel):
 
 
 class Page(BasePage):
-    pageid: int
+    pageid: Optional[int] = None
     links: Optional[list[BasePage]] = None
 
 
